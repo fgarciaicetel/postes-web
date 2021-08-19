@@ -12,6 +12,6 @@ router.delete('/postes/:posteId', posteController.deleteData)
 
 router.get('/departamentos', ubigeoController.departamentos)
 router.get('/provincias/:code', ubigeoController.provincias)
-router.get('/distritos/:name', ubigeoController.distritos)
+router.get('/distritos/:dep/:prov', ubigeoController.distritos)
 
 export default router;

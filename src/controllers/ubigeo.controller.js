@@ -36,16 +36,29 @@ export const provincias = async (req, res) => {
         }
     });
 
+    provincies.shift()
+
     return res.json(provincies)
 }
 
 export const distritos = async (req, res) => {
 
-    const ubigeo = new Ubigeo();
+    const ubigeo = Ubigeo;
 
-    const name = req.params.name
+    const dep = req.params.dep
+    const prov = req.params.prov
+    
+    const districts = []
 
-    const districts = ubigeo.find({ name: name }).include('districts').data
+    ubigeo.forEach(element => {
+
+        if (element.provincia == prov && element.departamento == dep) {
+            districts.push(element);
+        }
+
+    });
+
+    districts.shift()
 
     return res.json(districts)
 }
