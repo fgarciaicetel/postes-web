@@ -3,10 +3,10 @@ const router = Router()
 
 import * as posteController from '../controllers/postes.controller'
 
-//router.get('/postes', posteController.getAll)
+router.post('/postes', posteController.createData)
 router.get('/postes', posteController.findAll)
-//router.get('/postes/:posteId', posteController.getById)
-//router.put('/postes/:posteId', posteController.updateById)
-//router.delete('/postes/:posteId', posteController.delete)
+router.get('/postes/:posteId', posteController.getById)
+router.put('/postes/:posteId', posteController.updateData)
+router.delete('/postes/:posteId', posteController.deleteData)
 
 export default router;
