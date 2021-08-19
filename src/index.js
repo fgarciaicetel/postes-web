@@ -1,5 +1,5 @@
 import app from './app'
-import './libs/db'
+//import './libs/db'
 
 app.listen(4000);
 

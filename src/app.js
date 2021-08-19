@@ -2,7 +2,7 @@ import express from 'express'
 import morgan from 'morgan'
 
 
-//import productRoutes from './routes/products.routes'
+import apiRoutes from './routes/api.route'
 
 const app = express()
 
@@ -13,5 +13,6 @@ app.get('/', (req, res) => {
     res.json('hello world')
 })
 
+app.use('/api', apiRoutes)
 
 export default app;
