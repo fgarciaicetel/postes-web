@@ -1,18 +1,20 @@
 import express from 'express'
 import morgan from 'morgan'
 
+const path = require('path')
 
 import apiRoutes from './routes/api.route'
+import webRoutes from './routes/web.route'
 
 const app = express()
 
 app.use(express.json())
 app.use(morgan('dev'))
 
-app.get('/', (req, res) => {
-    res.json('hello world')
-})
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
 app.use('/api', apiRoutes)
+app.use('/web', webRoutes)
 
 export default app;

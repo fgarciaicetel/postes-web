@@ -37,7 +37,7 @@ export const deleteData = async (req, res) => {
 
     const id = req.params.posteId
 
-    const postes = await Poste.delete(id)
+    const postes = await Poste.remove(id)
 
     res.status(201).json(postes)
 }

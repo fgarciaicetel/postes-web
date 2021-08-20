@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postes</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+    
+    <div class="container" id="app">
+        <!-- Content here -->
+        <div class="row">
+            <div class="col">
+              <div class="d-flex justify-content-between">
+                <h3>Lista </h3>
+                <div>
+                  <a href="./postes/create" class="btn btn-success">Agregar</a>
+                </div>
+              </div>
+
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Item</th>
+        <th scope="col">Proyecto</th>
+        <th scope="col">NE</th>
+        <th scope="col">Contratista</th>
+        <th scope="col">Descripción</th>
+        <th scope="col">Marca</th>
+        <th scope="col">Tipo de piso</th>
+        <th scope="col">Calle/ Avenida</th>
+        <th scope="col">N° Lote</th>
+        <th scope="col">Distrito</th>
+        <th scope="col">Provincia</th>
+        <th scope="col">Departamento</th>
+        <th scope="col">Latitud</th>
+        <th scope="col">Longitud</th>
+        <th scope="col">Altura/ Carga poste</th>
+        <th scope="col">Codigo postal Departamento</th>
+        <th scope="col">Codigo postal Distrito</th>
+        <th scope="col">Codigo Poste</th>
+        <th scope="col">Codigo Final</th>
+        <th scope="col">Responsable</th>
+        <th scope="col">Fecha de asignación</th>
+        <th scope="col">Acción</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in postes">
+        <th scope="row">{{ item.item}}</th>
+        <td>{{ item.proyecto }}</td>
+        <td>{{ item.ne }}</td>
+        <td>{{ item.contratista }}</td>
+        <td>{{ item.descripcion }}</td>
+        <td>{{ item.marca }}</td>
+        <td>{{ item.tipo_piso }}</td>
+        <td>{{ item.direccion }}</td>
+        <td>{{ item.lote }}</td>
+        <td>{{ item.distrito }}</td>
+        <td>{{ item.provincia }}</td>
+        <td>{{ item.departamento }}</td>
+        <td>{{ item.latitud }}</td>
+        <td>{{ item.longitud }}</td>
+        <td>{{ item.altura }}</td>
+        <td>{{ item.codigo_departamento }}</td>
+        <td>{{ item.codigo_distrito }}</td>
+        <td>{{ item.codigo_poste }}</td>
+        <td>{{ item.codigo_final }}</td>
+        <td>{{ item.responsable }}</td>
+        <td>{{ item.fecha_asignacion }}</td>
+        <td > <div class="d-flex justify-content-between">
+          <a :href="'./postes/edit/' + item._id" class="btn btn-info">Editar</a> 
+          <a href="#" class="btn btn-danger" @click="deletePost(item._id)" >Eliminar</a>
+        </div> </td>
+      </tr>
+    
+    </tbody>
+  </table>
+</div>
+
+            </div>
+        </div>
+    </div>
+
+<script>
+    
+  var app = new Vue({
+    el: "#app",
+    data() {
+      return {
+        postes: []
+      };
+    },
+    mounted() {
+      this.getPostes(); 
+    },
+    methods: {
+      getPostes() {
+       
+        fetch('../api/postes')
+          .then(response => response.json())
+          .then(data => {
+            this.postes = data
+          });
+      },
+      deletePost(id) {
+        let url = '../api/postes/' + id
+        if (confirm('Estas seguro?')) {
+          fetch(url, {
+            method: 'DELETE',
+          })
+            .then(res => {
+              this.getPostes()
+            })
+        }
+      }
+    },
+  });
+
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+</body>
+</html>
