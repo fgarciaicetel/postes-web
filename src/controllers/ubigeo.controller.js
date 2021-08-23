@@ -1,64 +1,36 @@
-//import Ubigeo from "../libs/ubigeo2"
-import * as Ubigeo1 from "../libs/ubigeo"
-
-import Ubigeo from '../libs/ubigeo/peru.json'
+import Postesdb from "postes-db"
+import config from "../../config"
 
 export const departamentos = async (req, res) => {
 
     //const ubigeo = new Ubigeo();
-    
-    const ubigeo = Ubigeo;
-    const departamentos = []
-
-    ubigeo.forEach(element => {
-        //console.log(element.provincia)    
-
-        if (element.provincia == '00' && element.distrito == '00') {
-            departamentos.push(element);
-        }
-    });
+       
+    const {Departamento} = await Postesdb(config)
+   
+    const departamentos = await Departamento.findAll()
     
     return res.json(departamentos)
 }
 
 export const provincias = async (req, res) => {
 
-    const ubigeo = Ubigeo;
-
     const codigo = req.params.code
 
-    const provincies = []
-
-    ubigeo.forEach(element => {
-        
-        if (element.departamento == codigo && element.distrito == '00') {
-            provincies.push(element);
-        }
-    });
-
-    provincies.shift()
-
-    return res.json(provincies)
+    const {Provincia} = await Postesdb(config)
+   
+    const provincias = await Provincia.findAll(codigo)
+    
+    return res.json(provincias)
 }
 
 export const distritos = async (req, res) => {
 
-    const ubigeo = Ubigeo;
-
     const dep = req.params.dep
     const prov = req.params.prov
     
-    const districts = []
-
-    ubigeo.forEach(element => {
-
-        if (element.provincia == prov && element.departamento == dep) {
-            districts.push(element);
-        }
-
-    });
-
-    districts.shift()
-
+    const {Distrito} = await Postesdb(config)
+   
+    const districts = await Distrito.findAll(dep,prov)
+    
     return res.json(districts)
 }

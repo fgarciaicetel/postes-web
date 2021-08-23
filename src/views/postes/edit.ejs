@@ -71,19 +71,19 @@
     <div class="mb-3">
       <label  class="form-label">Departamento</label>
       <select class="form-select" @change="getProvincias" v-model="data.codigo_departamento">
-        <option v-for="item in departamentos" :value="item.departamento">{{ item.nombre }}</option>
+        <option v-for="item in departamentos" :value="item.codigo">{{ item.name }}</option>
       </select>
     </div>
     <div class="mb-3">
       <label  class="form-label">Provincias</label>
       <select class="form-select" @change="getDistritos" v-model="data.codigo_provincia">
-        <option v-for="item in provincias" :value="item.provincia">{{ item.nombre }}</option>
+        <option v-for="item in provincias" :value="item.codigo">{{ item.name }}</option>
       </select>
     </div>
     <div class="mb-3">
       <label  class="form-label">Distritos</label>
       <select class="form-select" v-model="data.codigo_distrito" @change="setDistrito">
-        <option v-for="item in distritos" :value="item.distrito">{{ item.nombre }}</option>
+        <option v-for="item in distritos" :value="item.codigo">{{ item.name }}</option>
       </select>
     </div>
     <div class="mb-3">

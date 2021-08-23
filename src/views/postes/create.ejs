@@ -30,7 +30,7 @@
       </div>
       <div class="mb-3">
         <label  class="form-label">Proyecto</label>
-        <input v-model="data.proyecto" name="proyecto" type="text" class="form-control" placeholder="">
+        <input v-model="data.proyecto" name="proyecto" type="text" class="form-control" placeholder="" required>
       </div>
       <div class="mb-3">
         <label  class="form-label">NE</label>
@@ -70,20 +70,20 @@
   <div class="col-6">
     <div class="mb-3">
       <label  class="form-label">Departamento</label>
-      <select class="form-select" @change="getProvincias" v-model="data.codigo_departamento">
-        <option v-for="item in departamentos" :value="item.departamento">{{ item.nombre }}</option>
+      <select class="form-select" @change="getProvincias" v-model="data.codigo_departamento" required>
+        <option v-for="item in departamentos" :value="item.codigo">{{ item.name }}</option>
       </select>
     </div>
     <div class="mb-3">
       <label  class="form-label">Provincias</label>
-      <select class="form-select" @change="getDistritos" v-model="data.codigo_provincia">
-        <option v-for="item in provincias" :value="item.provincia">{{ item.nombre }}</option>
+      <select class="form-select" @change="getDistritos" v-model="data.codigo_provincia" required>
+        <option v-for="item in provincias" :value="item.codigo">{{ item.name }}</option>
       </select>
     </div>
     <div class="mb-3">
       <label  class="form-label">Distritos</label>
-      <select class="form-select" v-model="data.codigo_distrito" @change="setDistrito">
-        <option v-for="item in distritos" :value="item.distrito">{{ item.nombre }}</option>
+      <select class="form-select" v-model="data.codigo_distrito" @change="setDistrito" required>
+        <option v-for="item in distritos" :value="item.codigo">{{ item.name }}</option>
       </select>
     </div>
     <div class="mb-3">
@@ -100,7 +100,7 @@
     </div>
     <div class="mb-3">
       <label  class="form-label">Codigo poste</label>
-      <input v-model="data.codigo_poste" name="altura" type="text" class="form-control" placeholder="">
+      <input v-model="data.codigo_poste" name="codigo_poste" type="text" class="form-control" placeholder="">
     </div>   
     <div class="mb-3">
       <label  class="form-label">Fecha de asignación</label>
@@ -136,9 +136,11 @@
 
         let dep = this.data.codigo_departamento
         let dist = this.data.codigo_distrito
-        let cod_poste = this.data.cod_poste
+        let cod_poste = this.data.codigo_poste
 
         let codigo_final = this.generateCodigoFinal(dep, dist, cod_poste)
+
+        this.data.codigo_final = codigo_final
 
         fetch(url, {
           method: 'POST',
@@ -170,6 +172,7 @@
           .then(response => response.json())
           .then(data => {
             this.provincias = data
+            this.distritos = []
           });
       },
       getDistritos(e) {
@@ -201,6 +204,16 @@
         }else{
             p2 = '0' + dist
         }
+
+        if(cod_poste >= 100){
+          p3 = '0' + cod_poste
+        }else if(cod_poste >= 10){
+          p3 = '00' + cod_poste
+        }else{
+          p3 = '000' + cod_poste
+        }
+
+        return p1+p2+'/'+p3
       }
     },
   });

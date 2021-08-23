@@ -1,12 +1,21 @@
+/*
 import './database'
 import Departamento from "../models/Departamento";
 import Provincia from '../models/Provincia';
 import Distrito from '../models/Distrito';
+*/
+
+import Postesdb from "postes-db"
+import config from "../../config"
 
 export const createDepartamentos = async () => {
 
     try {
-        const count = await Departamento.estimatedDocumentCount()
+        //const count = await Departamento.estimatedDocumentCount()
+
+        const {Departamento} = await Postesdb(config)
+   
+        const count = await Departamento.countData()
 
         if (count > 0) return;
 
@@ -25,7 +34,7 @@ export const createDepartamentos = async () => {
             { 'name': 'Junín', 'codigo': '12' },
             { 'name': 'La Libertad', 'codigo': '13' },
             { 'name': 'Lambayeque', 'codigo': '', 'codigo': '14' },
-            { 'name': 'Amazonas	', 'codigo': '15' },
+            { 'name': 'Amazonas', 'codigo': '15' },
             { 'name': 'Ancash', 'codigo': '16' },
             { 'name': 'Loreto', 'codigo': '17' },
             { 'name': 'Madre de Dios', 'codigo': '18' },
@@ -40,7 +49,8 @@ export const createDepartamentos = async () => {
         ]
 
         departamentos.forEach((element) => {
-            new Departamento({ name: element.name, codigo: element.codigo }).save()
+            //new Departamento({ name: element.name, codigo: element.codigo }).save()
+            Departamento.create(element)
         })
 
         console.log("importando departamentos...")
@@ -54,20 +64,26 @@ export const createDepartamentos = async () => {
 export const createProvincias = async () => {
 
     try {
-        const count = await Provincia.estimatedDocumentCount()
+        //const count = await Provincia.estimatedDocumentCount()
+
+        const {Provincia} = await Postesdb(config)
+   
+        const count = await Provincia.countData()
 
         if (count > 0) return;
 
         const provincias = [
-            { 'name': 'Lima', 'codigo': '1', 'departamento' : '2'},
-            { 'name': 'Callao', 'codigo': '7', 'departamento' : '7'},
+            { 'name': 'Lima', 'codigo': '1', 'departamento_codigo' : '2'},
+            { 'name': 'Callao', 'codigo': '7', 'departamento_codigo' : '7'},
         ]
 
         provincias.forEach((element) => {
-            new Provincia({ 
+            /*new Provincia({ 
                 name: element.name,
                 codigo: element.codigo,
-                departamento_codigo : element.departamento }).save()
+                departamento_codigo : element.departamento }).save()*/
+            Provincia.create(element)
+                
         })
 
         console.log("importando provincias...")
@@ -81,7 +97,10 @@ export const createProvincias = async () => {
 export const createDistritos = async () => {
 
     try {
-        const count = await Distrito.estimatedDocumentCount()
+        
+        const {Distrito} = await Postesdb(config)
+   
+        const count = await Distrito.countData()
 
         if (count > 0) return;
 
@@ -138,13 +157,23 @@ export const createDistritos = async () => {
         ]
 
         distritos.forEach((element) => {
-            new Distrito({
+            /*new Distrito({
                 name: element[1],
                 codigo: element[0],
                 departamento_codigo : element[3],
                 provincia_codigo : element[4],
                 codigo_postal : element[2]
-              }).save()
+              }).save()*/
+
+              const data = {
+                name: element[1],
+                codigo: element[0],
+                departamento_codigo : element[3],
+                provincia_codigo : element[4],
+                codigo_postal : element[2]
+              }
+
+              Distrito.create(data)
         })
 
         console.log("importando distritos...")
