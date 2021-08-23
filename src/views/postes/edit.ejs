@@ -143,8 +143,18 @@
           .then(response => response.json())
           .then(data => {
             this.data = data
-            this.getProvincias(data.codigo_departamento)
-            this.getDistritos(data.codigo_departamento, data.codigo_provincia)
+            if(data.codigo_departamento){
+              this.getProvincias(data.codigo_departamento)
+            }else{
+              this.getProvincias(15)
+            }
+           
+            if(data.codigo_provincia){
+              this.getDistritos(data.codigo_departamento, data.codigo_provincia)
+            }else{
+              this.getDistritos(15, "01")
+            }
+            
           });
       },
       postPostes() {
@@ -173,14 +183,20 @@
             this.departamentos = data
           });
       },
-      getProvincias(e) {
+      getProvincias(dep) {
         //this.data.departamento = event.target.options[event.target.options.selectedIndex].text;
+
+        /*
         let dep = ''
         if(this.id){
           dep = data.codigo_departamento
         }else{
           dep = e.target.value
+          this.data.departamento = event.target.options[event.target.options.selectedIndex].text;
         }
+        */
+
+    
 
         fetch('../../../api/provincias/' + dep)
           .then(response => response.json())
@@ -191,6 +207,8 @@
       },
       getDistritos(dep, prov) {
         //this.data.provincia = event.target.options[event.target.options.selectedIndex].text;
+
+       
         fetch('../../../api/distritos/' + dep + '/' + prov)
           .then(response => response.json())
           .then(data => {

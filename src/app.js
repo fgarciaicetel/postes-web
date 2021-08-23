@@ -1,5 +1,6 @@
 import express from 'express'
 import morgan from 'morgan'
+import { createDepartamentos, createProvincias, createDistritos} from './libs/initialSetup'
 
 const path = require('path')
 
@@ -16,5 +17,9 @@ app.set('view engine', 'ejs')
 
 app.use('/api', apiRoutes)
 app.use('/web', webRoutes)
+
+createDepartamentos()
+createProvincias()
+createDistritos()
 
 export default app;
