@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %>></title>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+<body>
+    
+    <div class="container" id="app">
+        <!-- Content here -->
+        <div class="row">
+            <div class="col">
+              <div class="d-flex justify-content-between">
+                <h3>Editar </h3>               
+                
+              </div>
+
+<div class="row">
+  <div class="col-6">
+    <form @submit.prevent="postCamaras">
+      <div class="mb-3">
+        <label  class="form-label">Item</label>
+        <input v-model="data.item" name="item" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="mb-3">
+        <label  class="form-label">Proyecto</label>
+        <input v-model="data.proyecto" name="proyecto" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="mb-3">
+        <label  class="form-label">NE</label>
+        <input v-model="data.ne" name="ne" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="mb-3">
+        <label  class="form-label">Contratista</label>
+        <input v-model="data.contratista" name="contratista" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="mb-3">
+        <label  class="form-label">Descripción</label>
+        <input v-model="data.descripcion" name="descripcion" type="text" class="form-control" placeholder="">
+      </div>
+
+      <div class="mb-3">
+        <label  class="form-label">Marca</label>
+        <input v-model="data.marca" name="marca" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="mb-3">
+        <label  class="form-label">Tipo de piso</label>
+        <input v-model="data.tipo_piso" name="tipo_piso" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="mb-3">
+        <label  class="form-label">Dirección</label>
+        <input v-model="data.direccion" name="direccion" type="text" class="form-control" placeholder="">
+      </div>
+      <div class="mb-3">
+        <label  class="form-label">Lote</label>
+        <input v-model="data.lote" name="lote" type="text" class="form-control" placeholder="">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Actualizar</button>
+
+      <a href="../../camaras" class="btn btn-success">Regresar</a>
+    </form>
+  </div>
+  <div class="col-6">
+    <div class="mb-3">
+      <label  class="form-label">Departamento</label>
+      <select class="form-select" @change="getProvincias" v-model="data.codigo_departamento">
+        <option v-for="item in departamentos" :value="item.codigo">{{ item.name }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label  class="form-label">Provincias</label>
+      <select class="form-select" @change="getDistritos" v-model="data.codigo_provincia">
+        <option v-for="item in provincias" :value="item.codigo">{{ item.name }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label  class="form-label">Distritos</label>
+      <select class="form-select" v-model="data.codigo_distrito" @change="setDistrito">
+        <option v-for="item in distritos" :value="item.codigo">{{ item.name }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label  class="form-label">Latitud</label>
+      <input v-model="data.latitud" name="latitud" type="text" class="form-control" placeholder="">
+    </div>
+    <div class="mb-3">
+      <label  class="form-label">Longitud</label>
+      <input v-model="data.longitud" name="longitud" type="text" class="form-control" placeholder="">
+    </div>
+    <div class="mb-3">
+      <label  class="form-label">Altura/ Carga camara</label>
+      <input v-model="data.dimension" name="dimension" type="text" class="form-control" placeholder="">
+    </div>
+    <div class="mb-3">
+      <label  class="form-label">Codigo camara</label>
+      <input v-model="data.codigo_camara" name="altura" type="text" class="form-control" placeholder="">
+    </div>   
+    <div class="mb-3">
+      <label  class="form-label">Fecha de asignación</label>
+      <input v-model="data.fecha_asignacion" name="fecha_asignacion" type="date" class="form-control" placeholder="">
+    </div>
+    <div class="mb-3">
+      <label  class="form-label">Comentarios</label>
+      <textarea name="" id="" cols="30" rows="3" v-model="data.comentario" name="comentario" class="form-control"></textarea>
+    </div>
+  </div>
+</div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //var titulo = "<%= id %>"         
+     </script>
+<script>
+
+  const camara_id = "<%= id %>" 
+
+  var app = new Vue({
+    el: "#app",
+    data() {
+      return {
+        data: {},
+        departamentos : [],
+        provincias : [],
+        distritos : [],
+        id : camara_id
+      };
+    },
+    mounted() {
+      this.getDepartamentos()
+      this.getCamara()
+      console.log(this.id)
+    },
+    methods: {
+      getCamara() {
+        fetch('../../../api/camaras/' + this.id)
+          .then(response => response.json())
+          .then(data => {
+            this.data = data
+            if(data.codigo_departamento){
+              this.getProvincias(data.codigo_departamento)
+            }else{
+              this.getProvincias(15)
+            }
+           
+            if(data.codigo_provincia){
+              this.getDistritos(data.codigo_departamento, data.codigo_provincia)
+            }else{
+              this.getDistritos(15, "01")
+            }
+            
+          });
+      },
+      postCamaras() {
+       
+        let url = '../../../api/camaras/' + this.id
+
+        fetch(url, {
+          method: 'PUT',
+          body: JSON.stringify(this.data),
+          headers : {
+            'Content-Type' : 'application/json'
+          }
+        }).then( data => {
+
+          alert('Camara Actualizado')
+        }).catch( error = console.error(error))
+        
+
+       alert('producto-registrado' + this.data.proyecto)
+      },
+      getDepartamentos() {
+        
+        fetch('../../../api/departamentos')
+          .then(response => response.json())
+          .then(data => {
+            this.departamentos = data
+          });
+      },
+      getProvincias(dep) {
+        //this.data.departamento = event.target.options[event.target.options.selectedIndex].text;
+
+        /*
+        let dep = ''
+        if(this.id){
+          dep = data.codigo_departamento
+        }else{
+          dep = e.target.value
+          this.data.departamento = event.target.options[event.target.options.selectedIndex].text;
+        }
+        */
+
+    
+
+        fetch('../../../api/provincias/' + dep)
+          .then(response => response.json())
+          .then(data => {
+            this.provincias = data
+
+          });
+      },
+      getDistritos(dep, prov) {
+        //this.data.provincia = event.target.options[event.target.options.selectedIndex].text;
+
+       
+        fetch('../../../api/distritos/' + dep + '/' + prov)
+          .then(response => response.json())
+          .then(data => {
+            this.distritos = data
+          });
+      },
+      setDistrito(e){
+        this.data.distrito = event.target.options[event.target.options.selectedIndex].text;
+      }
+    },
+  });
+
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+</body>
+</html>
