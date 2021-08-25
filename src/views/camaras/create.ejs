@@ -127,7 +127,8 @@
         data: {},
         departamentos : [],
         provincias : [],
-        distritos : []
+        distritos : [],
+        base_url: '<%= process.env.BASEURL_API %>'
       };
     },
     mounted() {
@@ -136,7 +137,7 @@
     methods: {
       postCamaras() {
        
-        let url = '../../api/camaras'
+        let url = this.base_url + '/camaras'
 
         let dep = this.data.codigo_departamento
         let dist = this.data.codigo_distrito
@@ -160,7 +161,7 @@
         
       },
       getDepartamentos() {      
-        fetch('../../api/departamentos')
+        fetch(this.base_url + '/departamentos')
           .then(response => response.json())
           .then(data => {
             this.departamentos = data
@@ -168,8 +169,8 @@
       },
       getProvincias(e) {
         let code = e.target.value
-        this.data.departamento = event.target.options[event.target.options.selectedIndex].text;
-        fetch('../../api/provincias/' + code)
+        this.data.departamento = e.target.options[e.target.options.selectedIndex].text;
+        fetch(this.base_url + '/provincias/' + code)
           .then(response => response.json())
           .then(data => {
             this.provincias = data
@@ -179,15 +180,15 @@
       getDistritos(e) {
         let dep = this.data.codigo_departamento
         let prov = e.target.value
-        this.data.provincia = event.target.options[event.target.options.selectedIndex].text;
-        fetch('../../api/distritos/' + dep + '/' + prov)
+        this.data.provincia = e.target.options[e.target.options.selectedIndex].text;
+        fetch(this.base_url + '/distritos/' + dep + '/' + prov)
           .then(response => response.json())
           .then(data => {
             this.distritos = data
           });
       },
       setDistrito(e){
-        this.data.distrito = event.target.options[event.target.options.selectedIndex].text;
+        this.data.distrito = e.target.options[e.target.options.selectedIndex].text;
       },
       generateCodigoFinal(dep, dist, dimension, cod_poste){
         let p1 = ''

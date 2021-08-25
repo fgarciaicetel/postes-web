@@ -96,7 +96,8 @@
     el: "#app",
     data() {
       return {
-        camaras: []
+        camaras: [],
+        base_url: '<%= process.env.BASEURL_API %>'
       };
     },
     mounted() {
@@ -105,14 +106,14 @@
     methods: {
       getCamaras() {
        
-        fetch('../api/camaras')
+        fetch( this.base_url + '/camaras')
           .then(response => response.json())
           .then(data => {
             this.camaras = data
           });
       },
       deleteCamara(id) {
-        let url = '../api/camaras/' + id
+        let url = this.base_url + '/camaras/' + id
         if (confirm('Estas seguro?')) {
           fetch(url, {
             method: 'DELETE',

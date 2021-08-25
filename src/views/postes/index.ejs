@@ -89,12 +89,13 @@
     </div>
 
 <script>
-    
+  
   var app = new Vue({
     el: "#app",
     data() {
       return {
-        postes: []
+        postes: [],
+        base_url: '<%= process.env.BASEURL_API %>'
       };
     },
     mounted() {
@@ -103,14 +104,14 @@
     methods: {
       getPostes() {
        
-        fetch('../api/postes')
+        fetch( this.base_url + '/postes')
           .then(response => response.json())
           .then(data => {
             this.postes = data
           });
       },
       deletePost(id) {
-        let url = '../api/postes/' + id
+        let url =  this.base_url + '/postes/' + id
         if (confirm('Estas seguro?')) {
           fetch(url, {
             method: 'DELETE',
